@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Menu</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <!-- //<script src="menu.js"></script> -->
+    <script>
+       var foodList=[];
+        var orderList=[];
+        var categoryList=[];
+        if (typeof(Storage) !== "undefined") {
+		// Code for localStorage/sessionStorage.
+		if(localStorage.getItem("item")!=undefined){
+			var food_string=localStorage.getItem("item");
+			foodList=JSON.parse(food_string);
+      categoryList=JSON.parse(localStorage.getItem("cate"));
+		}
+		
+		} else {
+		// Sorry! No Web Storage support..
+		}
+  
+  
+ 
+  
+   function showFoodList(){
+    if(localStorage.getItem("item")!=null){
+     $("#foodContainer").empty();
+      foodList=JSON.parse(window.localStorage.getItem("item"));
+        //console.log(showFood);
+        foodList.forEach(function(f,i){
+     $("#foodContainer").append(
+     '<div class="card">'
+         +'<img src="images/'+f.image+'" width="100px" height="100px">' 
+         +'<h5>'+f.name+'</h5>'
+         +' <p class="price">'+f.price+'</p>'
+         +'<input type="button" onclick="addToOrderTable('+i+')" value="Add">'
+         +' </div>'
+       );
+    });
+  }
+   }
+   function showCategory(){
+        // alert('Category length' +categoryList.length);
+			if(categoryList.length>0){
+				$("#categorycontainer").empty();
+				
+        categoryList.forEach(function(ct, i){
+					$("#categorycontainer").append('<li>'
+                        +'<a onclick="chooseCategory('+i+')">'+ct.cat+'</a>'
+                        +'</li>');
+				});
+			}
+		} 
+      
+    function chooseCategory(c){
+            var cChoose=categoryList[c];
+            alert('Choose Category is '+cChoose.cat);
+            var selectedfood=foodList.filter(function(p,i){
+                return p.cate==cChoose.cat;
+            });
+            //alert('selected food '+selectedFood.length);
+            showFoodByCategory(selectedfood);
+        }
+      function showFoodByCategory(fList){
+          $("#foodContainer").empty();
+            if(fList.length>0){
+              fList.forEach(function(c,i){
+              $("#foodContainer").append(
+		           ' <div class="p-2 border" >'
+			         +'<img src="images/'+c.image+'" width="100px" height="100px">' 
+			          +'<h5 class="name">'+c.name+'</h5>'
+			         +'<h4>Price :<span class="price">'+c.price+'</span></h4>'
+			           +'</div>');
+                });
+            }
+    }
+function addToOrderTable(i){
+  var oFood=foodList[i];
+  orderList.push(oFood);
+  //sum+=parseInt(orderList[i].total);
+  $('#myTable').append('<tr><td>' + oFood.name + '</td>' 
+     + '<td>' + '1'+ '</td>'
+     + '<td>'+oFood.price+'</td>'
+    +'<td>'+'<button onclick="deleteRow(this)">Delete</button>'+'<td></tr>'
+     
+   );
+  //  var foot = $("#myTable").find('tfoot');
+  //  foot.html('<tr><td>'+sum+'</td></tr>');
+  //   //console.log(orderList[i].total);
+  //   console.log(sum);
+
+ }
+   
+ $(document).ready(function(){
+        showFoodList();
+        showCategory();
+	});	
+
+    </script>
+  <style>
+   body{
+      margin:0;
+      padding:0;
+   }
+   body:before{
+     content: '';
+     position:fixed;
+     height:600vh;
+     width:210vh;
+      background-image: url("images/cafe.jpg");
+      background-position: center;
+      background-size: cover ;
+      background-attachment: fixed;
+       filter: blur(5px);
+      }
+     
+     
+    .card {
+    display:inline-flex; 
+    flex-wrap: wrap;
+    justify-content: space-around;
+     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    width: 100px;
+  height: 50%;
+  margin-top:10px;
+  margin-right:5px;
+  margin-left: 25px;
+  background: #ed5e1c;
+  text-align: center;
+  font-family: arial;
+  padding-right:0px;
+  line-height: 0.5;
+}
+.card button {
+  border: none;
+  outline: 0;
+  /* padding: 12px; */
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 50%;
+  font-size: 10px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+.sidenav {
+    margin-left: 50px;
+    margin-right: 0px; 
+    margin-top:0px;
+    height:500px;
+    width: 300px;
+     position: fixed; 
+    background: rgba(0, 0, 0, 0.8);
+    /* overflow-x: hidden; */
+   }
+
+
+.sidenav a {
+  padding: 10px 50px 10px 50px;
+  text-decoration: none;
+  font-size: 18px;
+  color:#c24106;
+  display: block;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.9);
+  
+  background:transparent;
+  width:300px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+}
+.navbar{
+  background: transparent;
+  background: rgba(0, 0, 0, 0.8);
+  height:70px;
+  font-size: 18px;
+  
+
+}
+.navabar>a{
+  font-size: 20px;
+      color:#c24106;
+}
+.tabledesign{
+     right:30px;
+     /* background: rgba(0, 0, 0, 0.7) */
+     border-color: black;
+      
+   }
+   .tabledesign tr th{
+    font-size: 20px;
+      color:#c24106;
+    }
+      .tabledesign td{
+    font-size: 18px;
+      color:#c24106;
+}
+</style>
+
+  
+</head>
+<body>
+ 
+
+    
+  <header>
+    <nav class="navbar navbar-expand-sm  navbar-dark">
+      <!-- Brand/logo -->
+      <a class="navbar-brand" href="#"><img src="images/coffeelogo.jpg" style="width:100px;height:50px"></a>
+      
+      <!-- Links -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="mymenu.html">FoodOrder</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="manageCategory.html">Manage Category</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="manageFood.html">Manage Food</a>
+        </li>
+      </ul>
+    </header>
+   
+ <div class="row">
+  <div class="col-sm-3" >
+    <div class="sidenav">
+    <ul id="categorycontainer" class="nav nav-tabs">
+
+    </ul>
+  </div>
+
+  </div>
+    <div class="col-sm-4"  id="foodContainer">
+      
+    </div>
+    <div class="col-sm-5 tabledesign">
+      <table class="table table-bordered" id="myTable">
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr></thead>
+          <tbody>
+            <tr></tr>
+           <!-- <tfoot><tr><th>Total</th></tr></tfoot>       -->
+        </tbody> 
+      </table>
+    </div>
+  </div>
+
+
+
+</body>
+</html>

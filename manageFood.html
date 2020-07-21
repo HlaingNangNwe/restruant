@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+ <script>
+   var foodList=[];
+    var categoryList=[];
+    var editArr=[];
+    if (typeof(Storage) !== "undefined") {
+		// Code for localStorage/sessionStorage.
+		if(localStorage.getItem("item")!=null){
+      foodList=JSON.parse(localStorage.getItem("item"));
+		}
+		if(localStorage.getItem("cate")!=undefined){
+      categoryList=JSON.parse(localStorage.getItem("cate"));
+    }
+		
+		
+		} else {
+		// Sorry! No Web Storage support..
+    }
+    
+function addFood(){
+      var name= $("#txtname").val();
+      var price=$("#txtprice").val();
+      var image=$("#itemimage option:selected").val();
+      var cate= $("#cate option:selected").val();
+      var list={name:name,price:price,image:image,cate:cate};
+      foodList.push(list);
+      console.log(localStorage.setItem("item",JSON.stringify(foodList)));
+     //showFoodList();
+     //clearAll();
+     addToFoodTable();
+     //window.location="showFoodList.html";  
+    
+  }
+  function addToFoodTable(){
+      if(foodList.length>0){
+        $("#myfood tbody").empty();
+          var catefood=JSON.parse(localStorage.getItem("item"));
+        catefood.forEach(function(f,i){
+        $("#myfood").append('<tr><td>' + f.name + '</td>' 
+        + '<td>'+f.price+'</td>'
+        +'<td>'+'<img src="images/'+f.image+'" width="100px" height="100px">'+ '</td>' 
+        + '<td>'+f.cate+'</td>'
+        + '<td>'+'<input type="button" class="btn" onclick="editFood('+i+',this)"  value="Edit">'
+        +'<input type="button" class="btn" onclick="deleteFood('+i+',this)"value="Delete">'+'</td></tr>'
+       );
+       });
+      }
+     }
+     function showCategory(){
+			if(categoryList.length>0){
+				$("#cate").empty();
+				//$("#cate").append("<option> Select Category</option>");
+        categoryList.forEach(function(cf, i){
+					$("#cate").append("<option value='"+cf. cat+"'>"+cf. cat+"</option>");
+				});
+			}
+    }
+    $(document).ready(function(){
+	//showFoodItem();
+    addToFoodTable();
+    showCategory();
+  });
+  var deleteArr=[];
+
+function deleteFood(x){
+    var dd=JSON.parse(localStorage.getItem("item"));
+        for(var i=0; i<dd.length; i++){
+            if(dd[x]!=dd[i]){
+                deleteArr.push(dd[i]);
+            }
+        }
+        localStorage.removeItem("item");
+        localStorage.setItem("item", JSON.stringify(deleteArr));
+        alert("deleted successfully!");
+        window.location="manageFood.html";
+}
+</script>
+<style>
+     body{
+      margin:0;
+      padding:0;
+      font-family: arial;
+      color:#c24106;
+      
+   }
+   body:before{
+     content: '';
+     position:fixed;
+     height:600vh;
+     width:210vh;
+      background-image: url("images/cafe.jpg");
+      background-position: center;
+      background-size: cover ;
+      background-attachment: fixed;
+       filter: blur(5px);
+      }
+      .cateform{
+     position:absolute;
+     width:400px;
+     height:500px;
+     left: 200px;
+     margin-top: 10px;
+     background: rgba(0, 0, 0, 0.8);
+     padding:50px 20px;
+     /* padding-top: 10px; */
+   }
+   .cateform input{
+     width:200%;
+     padding-right:10px;
+    
+   }
+   .cateform input [type=text]{
+     border:none;
+     border-bottom: 1px solid #fff;
+     background: transparent;
+     outline: none;
+     height: 35px;
+      /* color:#fff; */
+     font-size:15px;
+   }
+   .tabledesign{
+    margin-top: 10px;
+    padding-top: 10px;
+     right:30px;
+     background: rgba(0, 0, 0, 0.9);
+     
+      
+   }
+   .tabledesign tr th{
+    font-size: 20px;
+      color:#c24106;
+    }
+      .tabledesign td{
+    font-size: 18px;
+      color:#c24106;
+}
+.btn{
+  
+    height:30px;
+     width:80px;
+     color:#fff;
+     margin-top: 20px;
+     /* margin-left: 0px; */
+     font-size:15px;
+     background:#c24106;
+     cursor:pointer;
+     float:right;
+     padding-top:5px;
+     padding-bottom: 20px;
+
+   }
+.navbar{
+  background: transparent;
+  background: rgba(0, 0, 0, 0.8);
+  height:70px;
+  font-size: 18px;
+  }
+  select {
+        width: 500px;
+        /* margin: 10px; */
+    }
+    /* select:focus {
+        min-width: 150px;
+        width: auto;
+    }     */
+</style>
+</head>
+
+    <header>
+        <nav class="navbar navbar-expand-sm  navbar-dark">
+          <!-- Brand/logo -->
+          <a class="navbar-brand" href="#"><img src="images/coffeelogo.jpg" style="width:100px;height:50px"></a>
+          
+          <!-- Links -->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="mymenu.html">FoodOrder</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="manageCategory.html">Manage Category</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="manageFood.html">Manage Food</a>
+            </li>
+          </ul>
+        </header>
+        <body>
+          <div class="row">
+            <div class="col-md-6">
+                  
+          <div class="cateform">
+          <div class=" col-md-6 ">
+            <h2>Available Food Item</h2>
+    
+    
+        <label for="inputname">Food  Name</label>
+        <input type="text" class="form-control" id="txtname">
+     
+      
+        <label for="inputprice">Price</label>
+        <input type="text" class="form-control" id="txtprice">
+     
+      
+        <label for="inputcategory">Item Image</label>
+        <select class="form-control" id="itemimage" name="foodimage">
+
+        <option value="strawberry.jpg">StrawBerry</option>
+        <option value="orange.jpg">Orange</option>
+        <option value="bubble.jpg">Bubble Tea</option>
+
+        <option value="mocha.jpg">Mochha</option>
+       <option value="cupchino.jpg">Cupuchino</option>
+        <option value="americano.jpg">Americano</option>
+
+        <option value="spaghtti.jpg">Spaghatti</option>
+        <option value="chinesenoodle.jpg">Chinese noodle soup</option>
+        <option value="japannoodle.jpg">Japan noodle</option>
+        <option value="thainoodle.jpg">Thai Noodle</option>
+
+      </select>
+   
+        <label for="inputcategory">Category</label>
+        <select class="form-control" id="cate" class="foodimage"></select>
+    
+        <button type="submit" class="btn btn-primary"  onclick="addFood();" style="float:right;">Add</button>
+      </div>
+       </div>
+            </div>
+      <div class="col-md-6 tabledesign">
+     
+        <table id="myfood" class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Image</th>
+              <th>Category</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+           
+          </tbody>
+        </table>
+        
+        </div>
+    </div>
+</body>
+</html>
